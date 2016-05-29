@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app="CarreExample">
+
+  <head>
+     <base href="/risk-assessment/">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.6/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.6/angular-cookies.min.js"></script>
+    <script src="risk_evidence_condition_parser.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+
+    <script src="script.js"></script>
+    
+  </head>
+
+  <body ng-controller="ExampleController">
+    <h1>CARRE Personalized Risk Assessment</h1>
+    <h4 ng-show="user.username">Hi {{user.username}}, <a ng-href="{{logoutUrl}}">Logout</a> </h4>
+    <h4 ng-hide="user.username">Hello guest, please <a ng-href="{{loginUrl}}">Login</a> or 
+    <button ng-click="loadTestUser()">Load Test User</button></h4>
+    <button ng-show="user.username" ng-click="loadData()" >Load my DATA</button> <img style="padding-left:5px;display:none" src="ajax-loader.gif" id="loading">
+    <hr>
+    <h4>My Last measurements</h4>
+    <ul id="measurements"></ul>
+    <h4>My Risk Assessment</h4>
+    <ul id="risk_factors"></ul>
+
+
+    
+    
+  </body>
+
+</html>
