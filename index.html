@@ -7,8 +7,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.6/angular.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.6/angular-cookies.min.js"></script>
     <script src="risk_evidence_condition_parser.min.js"></script>
-
-    <script src="script.js"></script>
+    <script src="example.controller.js"></script>
+    <script src="api.service.js"></script>
     
   </head>
 
@@ -20,26 +20,27 @@
     <button class="btn btn-sm btn-primary" ng-show="user.username&&!loading" ng-click="loadData()" >Load my DATA</button> <img style="padding-left:5px;" ng-show="loading" src="ajax-loader.gif">
     <hr>
     <div ng-hide="loading">
-      
-      <h4>My Last measurements</h4>
-      <ul class="list-group">
-      <li class="list-group-item" ng-repeat="me in measurements">
-        <a target="_blank" ng-href="{{me.link}}"> {{me.label}}</a>:  <b>{{ me.value }}</b>  ,<small> on {{me.date}}</small> 
-      </li>
-      </ul>
-      <h4>My Risk Assessment</h4>
-      <ul class="list-group">
-        <li class="list-group-item" ng-repeat="rf in risk_factors">
-          <a target="_blank" ng-href="{{rf.link}}">{{rf.label}}</a> 
-          with evidences:
-          <ul>
-            <li style="display:inline" ng-repeat="ev in rf.evidences">
-             <small><a target="_blank" ng-href="{{ev.link}}"> {{ev.label}}</a> with ratio  {{ ev.ratio }} </small>,
-            </li>
-          </ul>
+      <div class="alert alert-info" ng-hide="measurements.length>0">No data</div>
+      <div ng-show="measurements.length>0">
+        <h4>My Last measurements</h4>
+        <ul class="list-group">
+        <li class="list-group-item" ng-repeat="me in measurements">
+          <a target="_blank" ng-href="{{me.link}}"> {{me.label}}</a>:  <b>{{ me.value }}</b>  ,<small> on {{me.date}}</small> 
         </li>
-      </ul>
-      
+        </ul>
+        <h4>My Risk Assessment</h4>
+        <ul class="list-group">
+          <li class="list-group-item" ng-repeat="rf in risk_factors">
+            <a target="_blank" ng-href="{{rf.link}}">{{rf.label}}</a> 
+            with evidences:
+            <ul>
+              <li style="display:inline" ng-repeat="ev in rf.evidences">
+               <small><a target="_blank" ng-href="{{ev.link}}"> {{ev.label}}</a> with ratio  {{ ev.ratio }} </small>,
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
     </div>
 
 
