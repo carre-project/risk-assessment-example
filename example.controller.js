@@ -7,8 +7,8 @@ angular.module('CarreExample', ['ngCookies'])
 
     //set up the urls 
     var CARRE_DEVICES = API.accounts;
-    var testToken = '66efc31e652208e257c3781b2a40376084c0a2ac';
-    if($location.search().token) testToken = $location.search().token;
+    var testToken = '66efc31e652208e257c3781b2a40376084c0a2ac',token=null;
+    if($location.search().token) token = $location.search().token;
     
     //clean up the browser url
     $location.url('/').replace();
@@ -17,7 +17,7 @@ angular.module('CarreExample', ['ngCookies'])
     $scope.logoutUrl = CARRE_DEVICES + '/logout?next=' + baseUrl;
 
     // Retrieving a cookie and set initial user object
-    API.user().then(function(res) {
+    API.user(token).then(function(res) {
       $scope.user = {
         oauth_token: res.oauth_token,
         username: res.username
