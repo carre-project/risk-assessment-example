@@ -1,9 +1,9 @@
 /*global angular,RiskEvidenceConditionParser */
-angular.module('CarreExample', ['ngCookies'])
+angular.module('CarreExample', ['ngCookies','ngSanitize','ngAnimate','cfp.loadingBar','ngOnload'])
   .config(function($locationProvider) {
     $locationProvider.html5Mode(true);
   })
-  .controller('ExampleController', function($scope, $location, API,$sce) {
+  .controller('ExampleController', function($scope, $location, API,$sce, $timeout,cfpLoadingBar) {
 
     //set up the urls 
     var CARRE_DEVICES = API.accounts;
@@ -15,6 +15,9 @@ angular.module('CarreExample', ['ngCookies'])
     var baseUrl = $location.absUrl();
     $scope.loginUrl = CARRE_DEVICES + '/login?next=' + baseUrl;
     $scope.logoutUrl = CARRE_DEVICES + '/logout?next=' + baseUrl;
+    
+    // set default visualization type
+    $scope.visualizationType = 'list';
 
     // Retrieving a cookie and set initial user object
     API.user(token).then(function(res) {
@@ -36,7 +39,9 @@ angular.module('CarreExample', ['ngCookies'])
     };
 
     $scope.loadData = function() {
+      $scope.measurements=[];
       $scope.loading = true;
+      cfpLoadingBar.start();
       getMeasureListWithLatestValue();
     };
 
@@ -93,12 +98,19 @@ angular.module('CarreExample', ['ngCookies'])
 
             var risk_factor = makeLabel(rv.risk_factor.value);
             var risk_evidence = makeLabel(rv.risk_evidence.value);
+            var rf_source = makeLabel(rv.has_risk_factor_source.value);
+            var rf_target = makeLabel(rv.has_risk_factor_target.value);
             var rf_label = makeLabel(rv.rl_source_name.value) + " " +
               makeLabel(rv.has_risk_factor_association_type.value) + " " +
               makeLabel(rv.rl_target_name.value);
-
+            
+            
+            results.risk_elements
+            
             results.risk_factors[risk_factor] = results.risk_factors[risk_factor] || {
               label: rf_label,
+              source:rf_source,
+              target:rf_target,
               evidences: []
             };
 
@@ -114,6 +126,7 @@ angular.module('CarreExample', ['ngCookies'])
         });
         console.log(results);
         display(results);
+        $scope.loading = false;
         //           console.log(
         //             results.risk_factors,
         //             results.values,
@@ -140,7 +153,6 @@ angular.module('CarreExample', ['ngCookies'])
           })
         });
       }
-
       $scope.measurements = [];
       //make measurements
       for (var ob in results.observable_names) {
@@ -151,13 +163,28 @@ angular.module('CarreExample', ['ngCookies'])
           date: new Date(results.ob_dates[ob]).toLocaleString()
         });
       }
-
-      $scope.loading = false;
+      setGraphUrl();
 
     }
     
-    function setGraph(){
-      $scope.entrysystemUrl = $sce.trustAsResourceUrl($scope.currentProject.url);
+    
+    
+    $scope.iframeLoaded=function(){
+      $scope.iframesLoaded++;
+      if($scope.iframesLoaded===1) {
+        cfpLoadingBar.complete();
+      }
+    };
+    
+    function setGraphUrl(){
+      $scope.iframesLoaded=0;
+      
+      var base = "//stage-entry.carre-project.eu/";
+      // var base = "//beta.carre-project.eu:3000/#/";
+      var params = "explore?embed=true&hidemenu=true&showonlygraph=true&elementstype=risk_evidences";
+      var url = base+params+"&elements="+Object.keys(results.risk_evidences).join(",");
+      $scope.entrysystemUrlSankey = $sce.trustAsResourceUrl(url+"&graphtype=sankey");
+      $scope.entrysystemUrlNetwork = $sce.trustAsResourceUrl(url+"&graphtype=network");
     }
 
     function makeLabel(str) {
