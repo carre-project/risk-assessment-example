@@ -23,24 +23,32 @@
     <div ng-hide="loading">
       <div class="alert alert-info" ng-hide="measurements.length>0">No data</div>
       <div ng-show="measurements.length>0">
-        <h4>My Last measurements</h4>
-        <ul class="list-group">
-        <li class="list-group-item" ng-repeat="me in measurements">
-          <a target="_blank" ng-href="{{me.link}}"> {{me.label}}</a>:  <b>{{ me.value }}</b>  ,<small> on {{me.date}}</small> 
-        </li>
-        </ul>
-        <h4>My Risk Assessment</h4>
-        <ul class="list-group">
-          <li class="list-group-item" ng-repeat="rf in risk_factors">
-            <a target="_blank" ng-href="{{rf.link}}">{{rf.label}}</a> 
-            with evidences:
-            <ul>
-              <li style="display:inline" ng-repeat="ev in rf.evidences">
-               <small><a target="_blank" ng-href="{{ev.link}}"> {{ev.label}}</a> with ratio  {{ ev.ratio }} </small>,
-              </li>
-            </ul>
+        <div class="col-sm-6">
+          
+          <h4>My Last measurements</h4>
+          <ul class="list-group">
+          <li class="list-group-item" ng-repeat="me in measurements">
+            <a target="_blank" ng-href="{{me.link}}"> {{me.label}}</a>:  <b>{{ me.value }}</b>  ,<small> on {{me.date}}</small> 
           </li>
-        </ul>
+          </ul>
+          
+        </div>
+        <div class="col-sm-6">
+          
+          <h4>My Risk Assessment</h4>
+          <ul class="list-group">
+            <li class="list-group-item" ng-repeat="rf in risk_factors">
+              <a target="_blank" ng-href="{{rf.link}}">{{rf.label}}</a> 
+              with evidences:
+              <ul>
+                <li style="display:inline" ng-repeat="ev in rf.evidences">
+                 <small><a target="_blank" ng-href="{{ev.link}}"> {{ev.label}}</a> with ratio  {{ ev.ratio }} </small>,
+                </li>
+              </ul>
+            </li>
+          </ul>
+        
+        </div>
       </div>
     </div>
 
