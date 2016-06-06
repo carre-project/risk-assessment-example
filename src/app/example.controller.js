@@ -179,7 +179,7 @@ angular.module('CarreExample', ['ngCookies','ngSanitize','ngAnimate','cfp.loadin
     function setGraphUrl(){
       $scope.iframesLoaded=0;
       
-      var base = "//stage-entry.carre-project.eu/";
+      var base = "//entry.carre-project.eu/";
       // var base = "//beta.carre-project.eu:3000/#/";
       var params = "explore?embed=true&hidemenu=true&showonlygraph=true&elementstype=risk_evidences";
       var url = base+params+"&elements="+Object.keys(results.risk_evidences).join(",");
