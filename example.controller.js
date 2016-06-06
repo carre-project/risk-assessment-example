@@ -3,7 +3,7 @@ angular.module('CarreExample', ['ngCookies'])
   .config(function($locationProvider) {
     $locationProvider.html5Mode(true);
   })
-  .controller('ExampleController', function($scope, $location, API) {
+  .controller('ExampleController', function($scope, $location, API,$sce) {
 
     //set up the urls 
     var CARRE_DEVICES = API.accounts;
@@ -154,6 +154,10 @@ angular.module('CarreExample', ['ngCookies'])
 
       $scope.loading = false;
 
+    }
+    
+    function setGraph(){
+      $scope.entrysystemUrl = $sce.trustAsResourceUrl($scope.currentProject.url);
     }
 
     function makeLabel(str) {
