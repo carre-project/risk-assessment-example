@@ -1,6 +1,9 @@
 /*global angular */
 angular.module('CarreExample')
-  .service('API', function($http, $cookies, $q) {
+  .constant('CONFIG',{
+    'language':'el'
+  })
+  .service('API', function($http, $cookies, $q,CONFIG) {
 
     //set up the urls 
     var CARRE_DEVICES = 'https://devices.carre-project.eu/devices/accounts';
@@ -57,7 +60,7 @@ angular.module('CarreExample')
         } } \n\
     ?measurement :has_date / :has_value ?date ; ?p ?o . \n\
     ?o :has_value ?value . ?ob a risk:observable ; risk:has_external_predicate ?p; risk:has_observable_name ?ob_name.  \n\
-    FILTER (lang(?ob_name)='en') \n\
+    FILTER (lang(?ob_name)='"+CONFIG.language+"') \n\
     } \n";
 
     return $http.post(URL+'query?token='+user.oauth_token+'&sparql='+encodeURIComponent(query));
@@ -85,8 +88,8 @@ angular.module('CarreExample')
     " risk:has_risk_factor_target ?has_risk_factor_target.  \n "+
     " ?has_risk_factor_source risk:has_risk_element_name ?rl_source_name.  \n "+
     " ?has_risk_factor_target risk:has_risk_element_name ?rl_target_name.   \n "+
-    " FILTER(lang(?rl_source_name)='en')   \n "+
-    " FILTER(lang(?rl_target_name)='en')   \n "+
+    " FILTER(lang(?rl_source_name)='"+CONFIG.language+"')   \n "+
+    " FILTER(lang(?rl_target_name)='"+CONFIG.language+"')   \n "+
     " {  \n "+
     "  SELECT ?ob FROM <http://carre.kmi.open.ac.uk/riskdata> WHERE {  \n "+
     "  ?ob a risk:observable ;  \n "+

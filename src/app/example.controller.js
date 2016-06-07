@@ -3,7 +3,7 @@ angular.module('CarreExample', ['ngCookies','ngSanitize','ngAnimate','cfp.loadin
   .config(function($locationProvider) {
     $locationProvider.html5Mode(true);
   })
-  .controller('ExampleController', function($scope, $location, API,$sce, $timeout,cfpLoadingBar) {
+  .controller('ExampleController', function($scope, $location, API,$sce, $timeout,cfpLoadingBar,CONFIG) {
 
     //set up the urls 
     var CARRE_DEVICES = API.accounts;
@@ -167,6 +167,12 @@ angular.module('CarreExample', ['ngCookies','ngSanitize','ngAnimate','cfp.loadin
 
     }
     
+    // Change language specific
+    $scope.lang=CONFIG.language;
+    $scope.changeLanguage = function(){
+      CONFIG.language = $scope.lang;
+      $scope.loadData();
+    }
     
     
     $scope.iframeLoaded=function(){
@@ -181,7 +187,7 @@ angular.module('CarreExample', ['ngCookies','ngSanitize','ngAnimate','cfp.loadin
       
       var base = "//entry.carre-project.eu/";
       // var base = "//beta.carre-project.eu:3000/#/";
-      var params = "explore?embed=true&hidemenu=true&showonlygraph=true&elementstype=risk_evidences";
+      var params = "explore?embed=true&hidemenu=true&showonlygraph=true&elementstype=risk_evidences&lang="+CONFIG.language;
       var url = base+params+"&elements="+Object.keys(results.risk_evidences).join(",");
       $scope.entrysystemUrlSankey = $sce.trustAsResourceUrl(url+"&graphtype=sankey");
       // $scope.entrysystemUrlNetwork = $sce.trustAsResourceUrl(url+"&graphtype=network");
