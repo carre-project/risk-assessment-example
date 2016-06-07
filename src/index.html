@@ -49,7 +49,7 @@
         <div class="col-sm-8">
           <h4>My Risk Assessment
       <select style="margin-left:10px; display:inline" ng-model="visualizationType">
-          <option value="network">Network graph</option>
+          <!--<option value="network">Network graph</option>-->
           <option value="sankey">Sankey graph</option>
           <option value="list">Simple list</option>
       </select>
@@ -68,7 +68,7 @@
           </ul>          
           
           <iframe width="100%" ng-onload="iframeLoaded()" ng-show="visualizationType==='sankey'" height="1200px" frameBorder="0" scrolling="no" ng-src="{{entrysystemUrlSankey}}"> </iframe>
-          <iframe width="100%" ng-onload="iframeLoaded()" ng-show="visualizationType==='network'" height="1200px" frameBorder="0" scrolling="no" ng-src="{{entrysystemUrlNetwork}}"> </iframe>
+          <!--<iframe width="100%" ng-onload="iframeLoaded()" ng-show="visualizationType==='network'" height="1200px" frameBorder="0" scrolling="no" ng-src="{{entrysystemUrlNetwork}}"> </iframe>-->
 
           
         </div>

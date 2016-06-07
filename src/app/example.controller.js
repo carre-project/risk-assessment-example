@@ -184,7 +184,7 @@ angular.module('CarreExample', ['ngCookies','ngSanitize','ngAnimate','cfp.loadin
       var params = "explore?embed=true&hidemenu=true&showonlygraph=true&elementstype=risk_evidences";
       var url = base+params+"&elements="+Object.keys(results.risk_evidences).join(",");
       $scope.entrysystemUrlSankey = $sce.trustAsResourceUrl(url+"&graphtype=sankey");
-      $scope.entrysystemUrlNetwork = $sce.trustAsResourceUrl(url+"&graphtype=network");
+      // $scope.entrysystemUrlNetwork = $sce.trustAsResourceUrl(url+"&graphtype=network");
     }
 
     function makeLabel(str) {
