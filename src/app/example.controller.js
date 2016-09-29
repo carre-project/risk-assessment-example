@@ -1,13 +1,10 @@
 /*global angular,RiskEvidenceConditionParser */
-angular.module('CarreExample', ['ngCookies','ngSanitize','ngAnimate','cfp.loadingBar','ngOnload'])
-  .config(function($locationProvider) {
-    $locationProvider.html5Mode(true);
-  })
+angular.module('CarreExample')
   .controller('ExampleController', function($scope, $location, API,$sce, $timeout,cfpLoadingBar,CONFIG) {
 
     //set up the urls 
     var CARRE_DEVICES = API.accounts;
-    var testToken = '66efc31e652208e257c3781b2a40376084c0a2ac',token=null;
+    var testToken = 'e097e48bbc1e35d83f5289a053d088a06188b6f2',token=null;
     if($location.search().token) token = $location.search().token;
     
     //clean up the browser url
@@ -80,6 +77,8 @@ angular.module('CarreExample', ['ngCookies','ngSanitize','ngAnimate','cfp.loadin
         var data = res.data;
         results.summary = [];
         results.risk_evidences = {};
+        results.educational_resources = [];
+        results.risk_element_names = [];
         results.risk_factors = {};
         results.total_risk_evidences = data.length;
         data.forEach(function(rv) {
@@ -100,12 +99,14 @@ angular.module('CarreExample', ['ngCookies','ngSanitize','ngAnimate','cfp.loadin
             var risk_evidence = makeLabel(rv.risk_evidence.value);
             var rf_source = makeLabel(rv.has_risk_factor_source.value);
             var rf_target = makeLabel(rv.has_risk_factor_target.value);
-            var rf_label = makeLabel(rv.rl_source_name.value) + " " +
-              makeLabel(rv.has_risk_factor_association_type.value) + " " +
-              makeLabel(rv.rl_target_name.value);
+            var rf_source_name = makeLabel(rv.rl_source_name.value);
+            var rf_target_name = makeLabel(rv.rl_target_name.value);
+            var rf_label = makeLabel(rv.rl_source_name.value) + " --> " + makeLabel(rv.rl_target_name.value);
             
+            // populate risk element names
+            if(results.risk_element_names.indexOf(rf_source_name)===-1) results.risk_element_names.push(rf_source_name);
+            if(results.risk_element_names.indexOf(rf_target_name)===-1) results.risk_element_names.push(rf_target_name);
             
-            results.risk_elements
             
             results.risk_factors[risk_factor] = results.risk_factors[risk_factor] || {
               label: rf_label,
@@ -164,6 +165,17 @@ angular.module('CarreExample', ['ngCookies','ngSanitize','ngAnimate','cfp.loadin
         });
       }
       setGraphUrl();
+      
+      // make educational resources
+      $scope.educational=[];
+      $scope.educational = results.risk_element_names.map(function(rl){
+        return {
+          link:'https://edu.carre-project.eu/search/'+encodeURI(rl),
+          label:rl
+        }
+      })
+      //select first
+      $scope.selectEducational($scope.educational[0].label);
 
     }
     
@@ -191,6 +203,21 @@ angular.module('CarreExample', ['ngCookies','ngSanitize','ngAnimate','cfp.loadin
       var url = base+params+"&elements="+Object.keys(results.risk_evidences).join(",");
       $scope.entrysystemUrlSankey = $sce.trustAsResourceUrl(url+"&graphtype=sankey");
       // $scope.entrysystemUrlNetwork = $sce.trustAsResourceUrl(url+"&graphtype=network");
+    }
+
+
+    $scope.selectEducational=function(rl){
+      $scope.educationalTerm = rl;
+      $scope.showEducational=false;
+      cfpLoadingBar.start();
+      var base = "//edu.carre-project.eu/search/";
+      // var base = "//beta.carre-project.eu:8080/search/";
+      var url = base+encodeURI(rl);
+      $scope.educationalObjectUrl = $sce.trustAsResourceUrl(url+"?embed=true&lang="+CONFIG.language);
+      $timeout(function(){
+        $scope.showEducational=true;
+        cfpLoadingBar.complete();
+      },2000);
     }
 
     function makeLabel(str) {

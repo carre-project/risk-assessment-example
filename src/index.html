@@ -51,24 +51,32 @@
             </li>
           </ul>
         </div>
+        
         <div class="col-sm-8">
           <h4>My Risk Assessment
-      <select style="margin-left:10px; display:inline" ng-model="visualizationType">
-          <!--<option value="network">Network graph</option>-->
-          <option value="sankey">Sankey graph</option>
-          <option value="list">Simple list</option>
-      </select>
+            <select style="margin-left:10px; display:inline" ng-model="visualizationType">
+                <!--<option value="network">Network graph</option>-->
+                <option value="sankey">Sankey graph</option>
+                <option value="list">Simple list</option>
+                <option value="educational">Educational Material</option>
+            </select>
+            
+            <select ng-if="visualizationType==='educational'" 
+            style="margin-left:10px; display:inline" 
+            ng-change="selectEducational(educationalTerm)"
+            ng-model="educationalTerm">
+              <option ng-repeat="edu in educational" value="{{edu.label}}">{{edu.label}}</option>
+            </select>
     
           </h4>
           
           <ul class="list-group" ng-show="visualizationType==='list'">
             <li class="list-group-item" ng-repeat="rf in risk_factors">
-              <a target="_blank" ng-href="{{rf.link}}">{{rf.label}}</a> with evidences:
-              <ul>
-                <li style="display:inline" ng-repeat="ev in rf.evidences">
-                  <small><a target="_blank" ng-href="{{ev.link}}"> {{ev.label}}</a> with ratio  {{ ev.ratio }} </small>,
-                </li>
-              </ul>
+              <a target="_blank" ng-href="{{rf.link}}">{{rf.label}}</a> :
+              <span ng-repeat="ev in rf.evidences track by $index">
+                <a class="btn btn-xs btn-danger" target="_blank" ng-href="{{ev.link}}">{{ ev.ratio }} </a> 
+                <span style="width:10px;" ng-if="$last"></span>
+              </span>
             </li>
           </ul>          
           
@@ -76,7 +84,12 @@
           <!--<iframe width="100%" ng-onload="iframeLoaded()" ng-show="visualizationType==='network'" height="1200px" frameBorder="0" scrolling="no" ng-src="{{entrysystemUrlNetwork}}"> </iframe>-->
 
           
+          <iframe width="100%" ng-show="showEducational&&visualizationType==='educational'" height="1200px" frameBorder="0" scrolling="no" ng-src="{{educationalObjectUrl}}"> </iframe>
+
+          
+          
         </div>
+        
       </div>
     </div>
   </div>
